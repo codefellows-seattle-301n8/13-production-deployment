@@ -9,7 +9,7 @@ const sa = require('superagent');
 const PORT = process.env.PORT || 3000;
 const app = express();
 // const conString = 'postgres://USERNAME:PASSWORD@HOST:PORT';
-const conString = process.env.DATABASE_URL || `postgress://postgres:${process.env.KILOVOLT}@localhost:5432/kilovolt`; // TODO: Don't forget to set your own conString
+const conString = process.env.DATABASE_URL || `postgres://postgres:${process.env.KILOVOLT}@localhost:5432/kilovolt`; // TODO: Don't forget to set your own conString
 const client = new pg.Client(conString);
 client.connect();
 client.on('error', err => console.error(err));
