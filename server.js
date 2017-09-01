@@ -129,9 +129,9 @@ app.delete('/articles', (request, response) => {
 app.get('repos/', (req, res) => {
   sa.get('https://api.github.com/user/repos')
     .set('Authorization', `token ${process.env.GITHUB_TOKEN}`)
-    .end((err, repos) => {
+    .end((err, result) => {
       if(err) console.log(err);
-      res.send(repos);
+      res.send(result.body);
     })
 });
 
