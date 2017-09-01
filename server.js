@@ -2,13 +2,14 @@
 
 const pg = require('pg');
 const fs = require('fs');
+const sa = require('superagent');
 const express = require('express');
 const bodyParser = require('body-parser');
 const requestProxy = require('express-request-proxy'); // REVIEW: We've added a new package here to our requirements, as well as in the package.json
 const PORT = process.env.PORT || 3000;
 const app = express();
-// const conString = 'postgres://USERNAME:PASSWORD@HOST:PORT';
-const conString = ''; // TODO: Don't forget to set your own conString
+// const conString = 'postgres://USERNAME:PASSWORD@HOST:PORT'; lul
+const conString = process.env.DATABASE_URL || 'postgres://joelepstein@localhost:5432/301blog'; // TODO: Don't forget to set your own conString
 const client = new pg.Client(conString);
 client.connect();
 client.on('error', err => console.error(err));
@@ -125,7 +126,20 @@ app.delete('/articles', (request, response) => {
   .catch(console.error);
 });
 
+app.get('/repos/', (req, res) => {
+  sa.get('https://api.github.com/user/repos')
+    .set('Authorization', `token ${process.env.GITHUB_TOKEN}`)
+    .end((err, result) => {
+      if(err) console.log(err);
+      res.send(result.body);
+    })
+});
+
 loadDB();
+
+app.get('/*', (there, backAgain) => {
+  backAgain.sendFile('index.html', {root: './public'});
+});
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}!`));
 
