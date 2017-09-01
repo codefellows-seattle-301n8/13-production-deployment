@@ -126,7 +126,7 @@ app.delete('/articles', (request, response) => {
   .catch(console.error);
 });
 
-app.get('repos/', (req, res) => {
+app.get('/repos/', (req, res) => {
   sa.get('https://api.github.com/user/repos')
     .set('Authorization', `token ${process.env.GITHUB_TOKEN}`)
     .end((err, result) => {
